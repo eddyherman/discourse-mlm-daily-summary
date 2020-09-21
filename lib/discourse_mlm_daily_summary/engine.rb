@@ -8,7 +8,7 @@ module DiscourseMlmDailySummary
 
       require_dependency 'user_notifications'
       class ::UserNotifications
-        
+
          def apply_notification_styles(email)
                    email.html_part.body = Email::Styles.new(email.html_part.body.to_s).tap do |styles|
                    styles.format_basic
@@ -27,6 +27,7 @@ module DiscourseMlmDailySummary
             .includes(:posts)
             .for_digest(user, 100.years.ago)
             .where("posts.created_at > ?", @since)
+            .where("solved != True")
             .order("posts.id")
 
           unless user.staff?
@@ -50,7 +51,7 @@ module DiscourseMlmDailySummary
 
           apply_notification_styles(build_email(@user.email, opts))
         end
-      end 
+      end
 
       require_dependency 'user_serializer'
       class ::UserSerializer
