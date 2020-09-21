@@ -27,7 +27,7 @@ module DiscourseMlmDailySummary
             .includes(:posts)
             .for_digest(user, 100.years.ago)
             .where("posts.created_at > ?", @since)
-            #.where("solved != True")
+            .where("posts.action_type_id != 15")
             .order("posts.id")
 
           unless user.staff?
